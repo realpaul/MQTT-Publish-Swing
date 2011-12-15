@@ -121,6 +121,7 @@ public class PushCenterView extends FrameView {
         jTextArea1 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jLabelSentStatus = new javax.swing.JLabel();
+        jButtonOnlineUserCount = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -202,6 +203,19 @@ public class PushCenterView extends FrameView {
         jLabelSentStatus.setText(resourceMap.getString("jLabelSentStatus.text")); // NOI18N
         jLabelSentStatus.setName("jLabelSentStatus"); // NOI18N
 
+        jButtonOnlineUserCount.setText(resourceMap.getString("jButtonOnlineUserCount.text")); // NOI18N
+        jButtonOnlineUserCount.setName("jButtonOnlineUserCount"); // NOI18N
+        jButtonOnlineUserCount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonOnlineUserCountMouseClicked(evt);
+            }
+        });
+        jButtonOnlineUserCount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jButtonOnlineUserCountKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -229,9 +243,12 @@ public class PushCenterView extends FrameView {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldDeviceID, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addComponent(jButtonOnlineUserCount)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
                     .addComponent(jLabelSentStatus))
                 .addContainerGap())
         );
@@ -262,8 +279,10 @@ public class PushCenterView extends FrameView {
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButtonOnlineUserCount))
+                        .addContainerGap(42, Short.MAX_VALUE))
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelSentStatus)
@@ -310,7 +329,7 @@ public class PushCenterView extends FrameView {
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 234, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusAnimationLabel)
@@ -384,9 +403,33 @@ private void jButton1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
 // TODO add your handling code here:
     jButton1MouseClicked(null);
 }//GEN-LAST:event_jButton1KeyReleased
+
+private void jButtonOnlineUserCountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOnlineUserCountMouseClicked
+// TODO add your handling code here:
+    jLabelSentStatus.setText("Online Users: " + new Integer(mqtt.getOnlineUserCount()).toString());
+        Runnable disappearLabel = new Runnable() {
+
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (Exception ex) {
+                }
+                jLabelSentStatus.setText("");
+            }
+        };
+        Thread thread = new Thread(disappearLabel);
+        thread.start();
+}//GEN-LAST:event_jButtonOnlineUserCountMouseClicked
+
+private void jButtonOnlineUserCountKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButtonOnlineUserCountKeyReleased
+// TODO add your handling code here:
+    jButtonOnlineUserCountMouseClicked(null);
+}//GEN-LAST:event_jButtonOnlineUserCountKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonConnect;
+    private javax.swing.JButton jButtonOnlineUserCount;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

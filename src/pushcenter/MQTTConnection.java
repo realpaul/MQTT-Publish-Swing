@@ -8,7 +8,7 @@ public class MQTTConnection implements MqttSimpleCallback {
     private static MqttPersistence MQTT_PERSISTENCE = null;
     // MQTT client ID, which is given the broker. In this example, I also use this for the topic header. 
     // You can use this to run push notifications for multiple apps with one MQTT broker. 
-    public final static String MQTT_CLIENT_ID = "cocoafish";
+    public final static String MQTT_CLIENT_ID = "cf";
     // We don't need to remember any state between the connections, so we use a clean start. 
     private static boolean MQTT_CLEAN_START = true;
     // Let's set the internal keep alive for MQTT to 15 mins. I haven't tested this value much. It could probably be increased.
@@ -20,6 +20,8 @@ public class MQTTConnection implements MqttSimpleCallback {
     // The broker should not retain any messages.
     private static boolean MQTT_RETAINED_PUBLISH = false;
     private String clientID;
+    
+    private static int onlineUserCount;
 
     // Creates a new connection given the broker address and initial topic
     public MQTTConnection(String brokerHostName, String brokerPort, String brokerClientID, String initTopic) throws MqttException {
@@ -38,6 +40,8 @@ public class MQTTConnection implements MqttSimpleCallback {
         subscribeToTopic(initTopic);
 
         System.out.println("Connection established to " + brokerHostName + " on topic " + initTopic);
+        
+        onlineUserCount = 0;
     }
     
     public boolean isConnected(){
@@ -99,10 +103,20 @@ public class MQTTConnection implements MqttSimpleCallback {
      * Called when we receive a message from the message broker. 
      */
     public void publishArrived(String topicName, byte[] payload, int qos, boolean retained) {
-        // Show a notification
         String s = new String(payload);
-        //showNotification(s);
+        
+        if(s.startsWith("register")){
+            onlineUserCount++;
+        }
+        else if (s.startsWith("remove")){
+            onlineUserCount--;
+        }
+        
         System.out.println("Got message: " + s);
+    }
+    
+    public int getOnlineUserCount(){
+        return onlineUserCount;
     }
 //    public void sendKeepAlive() throws MqttException {
 //        System.out.println("Sending keep alive");
